@@ -23,8 +23,7 @@ class UserAPI extends DataSource {
    * instead
    */
   async findOrCreateUser({ email: emailArg } = {}) {
-    const email =
-      this.context && this.context.user ? this.context.user.email : emailArg;
+    const email = this.context && this.context.user ? this.context.user.email : emailArg;
     if (!email || !isEmail.validate(email)) return null;
 
     const users = await this.store.users.findOrCreate({ where: { email } });
@@ -33,18 +32,13 @@ class UserAPI extends DataSource {
 
   async bookTrips({ launchIds }) {
     const userId = this.context.user.id;
-    if (!userId) return;
+    if (!userId) return [];
 
-    let results = [];
+    const results = await Promise.all(
+      launchIds.map(launchId => this.bookTrip({ launchId })),
+    );
 
-    // for each launch id, try to book the trip and add it to the results array
-    // if successful
-    for (const launchId of launchIds) {
-      const res = await this.bookTrip({ launchId });
-      if (res) results.push(res);
-    }
-
-    return results;
+    return results.filter(bookTrip => bookTrip);
   }
 
   async bookTrip({ launchId }) {
