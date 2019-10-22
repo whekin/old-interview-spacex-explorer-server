@@ -1,0 +1,18 @@
+{
+  "extends": "airbnb-base",
+  "env": {
+    "es6": true,
+    "node": true
+  },
+  "plugins": [
+    "import"
+  ],
+  "rules": {
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"],
+    "linebreak-style": ["error", "unix"],
+    "indent": ["error", 2],
+    "object-curly-spacing": ["error", "always"],
+    "no-underscore-dangle": ["error", { "allow": ["_id"] }]
+  }
+}
