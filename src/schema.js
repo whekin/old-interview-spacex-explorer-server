@@ -2,10 +2,15 @@ import { gql } from 'apollo-server';
 
 export default gql`
     type Query {
-        launches: [Launch]!
+        launches(pageSize: Int, after: String): LaunchConnection!
         launch(id: ID!): Launch
         me: User
-        test: String
+    }
+
+    type LaunchConnection {
+        cursor: String!
+        hasMore: Boolean!
+        launches: [Launch]
     }
 
     type Launch {
