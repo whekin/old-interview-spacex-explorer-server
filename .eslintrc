@@ -8,6 +8,7 @@
     "import"
   ],
   "rules": {
+    "class-methods-use-this": "off",
     "semi": ["error", "always"],
     "quotes": ["error", "single"],
     "linebreak-style": ["error", "unix"],

@@ -26,7 +26,7 @@ export default class LaunchAPI extends RESTDataSource {
     );
   }
 
-  static launchReducer(launch) {
+  launchReducer(launch) {
     return {
       id: launch.flight_number || 0,
       cursor: `${launch.launch_date_unix}`,

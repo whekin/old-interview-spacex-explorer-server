@@ -5,6 +5,7 @@ export default gql`
         launches: [Launch]!
         launch(id: ID!): Launch
         me: User
+        test: String
     }
 
     type Launch {
