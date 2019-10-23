@@ -24,7 +24,7 @@ export default {
     me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser(),
   },
   Mission: {
-    missionPatch: (mission, { size } = { size: 'LARGE'}) => {
+    missionPatch: (mission, { size } = { size: 'LARGE' }) => {
       return size === 'SMALL'
         ? mission.missionPatchSmall
         : mission.missionPatchLarge;
