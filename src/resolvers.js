@@ -41,6 +41,24 @@ export default {
         launches,
       };
     },
+    cancelTrip: async (_, { launchId }, { dataSources }) => {
+      const res = await dataSources.userAPI.cancelTrip({ launchId });
+
+      if (!res) {
+        return {
+          success: false,
+          message: `Failed to cancel the trip id ${ launchId }`
+        };
+      }
+
+      const launch = dataSources.userAPI.getLaunchById({ launchId });
+      
+      return {
+        success: true,
+        message: 'Successfully canceled the trip',
+        launches: [launch]
+      };
+    },
   },
   Mission: {
     missionPatch: (mission, { size } = { size: 'LARGE' }) => {
