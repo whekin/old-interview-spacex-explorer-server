@@ -28,6 +28,19 @@ export default {
       const user = await dataSources.userAPI.findOrCreateUser({ email });
       if (user) return Buffer.from(email).toString('base64');
     },
+    bookTrips: (_, { launchIds }, { dataSources }) => {
+      const res = dataSources.userAPI.bookTrips({ launchIds });
+      const launches = dataSources.userAPI.getLaunchesByIds({ launchIds });
+      
+      const success = res.lenght === launches.length;
+      return {
+        success,
+        message: success
+          ? 'Trips have booked successfully'
+          : `The following trips can't be booked: ${launches.filter(id => !res.includes(id))}`,
+        launches,
+      };
+    },
   },
   Mission: {
     missionPatch: (mission, { size } = { size: 'LARGE' }) => {
