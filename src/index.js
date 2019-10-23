@@ -20,7 +20,7 @@ const server = new ApolloServer({
   resolvers,
   dataSources,
   context: async ({ req }) => {
-    const auth = req.headers && req.header.authorization;
+    const auth = req.headers && req.header.authorization || '';
     const email = Buffer.from(auth, 'base64').toString('ascii');
     
     if (!isEmail.validate(email)) return { user: null };
