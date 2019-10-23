@@ -30,7 +30,7 @@ export default {
     },
     bookTrips: (_, { launchIds }, { dataSources }) => {
       const res = dataSources.userAPI.bookTrips({ launchIds });
-      const launches = dataSources.userAPI.getLaunchesByIds({ launchIds });
+      const launches = dataSources.launchAPI.getLaunchesByIds({ launchIds });
       
       const success = res.lenght === launches.length;
       return {
