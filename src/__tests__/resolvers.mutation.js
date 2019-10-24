@@ -1,4 +1,4 @@
-const resolvers = require('../resolvers');
+const { default: resolvers } = require('../resolvers');
 
 const mockContext = {
   dataSources: {
@@ -31,7 +31,7 @@ describe('[Mutation.bookTrips]', () => {
     );
     expect(res).toEqual({
       launches: [{ cursor: 'foo', id: 999 }],
-      message: 'trips booked successfully',
+      message: 'Trips have booked successfully',
       success: true,
     });
 
@@ -70,7 +70,7 @@ describe('[Mutation.cancelTrip]', () => {
     );
     expect(res).toEqual({
       success: true,
-      message: 'trip cancelled',
+      message: 'Successfully canceled the trip',
       launches: [{ id: 999, cursor: 'foo' }],
     });
 

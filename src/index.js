@@ -41,3 +41,15 @@ const server = new ApolloServer({
 server.listen().then(({ url }) => {
   console.log(`Server ready at ${url}`);
 });
+
+export default {
+  dataSources,
+  context,
+  typeDefs,
+  resolvers,
+  ApolloServer,
+  LaunchAPI,
+  UserAPI,
+  store,
+  server,
+};

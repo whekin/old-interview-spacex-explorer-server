@@ -3,13 +3,15 @@
   "parser": "babel-eslint",
   "env": {
     "es6": true,
-    "node": true
+    "node": true,
+    "jest/globals": true
   },
   "parserOptions": {
     "ecmaVersion": 2020
   },
   "plugins": [
-    "import"
+    "import",
+    "jest"
   ],
   "rules": {
     "semi": ["error", "always"],

@@ -32,12 +32,12 @@ export default {
       const res = await dataSources.userAPI.bookTrips({ launchIds });
       const launches = await dataSources.launchAPI.getLaunchesByIds({ launchIds });
       
-      const success = res.length === launches.length;
+      const success = res.length === launchIds.length;
       return {
         success,
         message: success
           ? 'Trips have booked successfully'
-          : `The following trips can't be booked: ${launches.filter(id => !res.includes(id))}`,
+          : `The following trips can't be booked: ${launchIds.filter(id => !res.includes(id))}`,
         launches,
       };
     },

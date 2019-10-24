@@ -1,4 +1,4 @@
-const resolvers = require('../resolvers');
+const { default: resolvers } = require('../resolvers');
 
 const mockMission = {
   name: 'foo',
