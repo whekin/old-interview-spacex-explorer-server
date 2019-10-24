@@ -8,6 +8,10 @@ import UserAPI from './datasources/user';
 
 import isEmail from 'isemail';
 
+import dotenv from 'dotenv';
+
+dotenv.config();
+
 const store = createStore();
 
 const dataSources = () => ({
