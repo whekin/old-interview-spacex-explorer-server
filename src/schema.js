@@ -45,7 +45,7 @@ export default gql`
     
     type Mutation {
         bookTrips(launchIds: [ID]!): TripUpdateResponse!
-        cancelTrip(launchIds: ID!): TripUpdateResponse!
+        cancelTrip(launchId: ID!): TripUpdateResponse!
         login(email: String): String # login token
     }
 

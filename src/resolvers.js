@@ -28,11 +28,11 @@ export default {
       const user = await dataSources.userAPI.findOrCreateUser({ email });
       if (user) return Buffer.from(email).toString('base64');
     },
-    bookTrips: (_, { launchIds }, { dataSources }) => {
-      const res = dataSources.userAPI.bookTrips({ launchIds });
-      const launches = dataSources.launchAPI.getLaunchesByIds({ launchIds });
+    bookTrips: async (_, { launchIds }, { dataSources }) => {
+      const res = await dataSources.userAPI.bookTrips({ launchIds });
+      const launches = await dataSources.launchAPI.getLaunchesByIds({ launchIds });
       
-      const success = res.lenght === launches.length;
+      const success = res.length === launches.length;
       return {
         success,
         message: success
@@ -51,7 +51,7 @@ export default {
         };
       }
 
-      const launch = dataSources.userAPI.getLaunchById({ launchId });
+      const launch = dataSources.launchAPI.getLaunchById({ launchId });
       
       return {
         success: true,
