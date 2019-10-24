@@ -15,21 +15,23 @@ const dataSources = () => ({
   userAPI: new UserAPI({ store }),
 });
 
+const context = async ({ req }) => {
+  const auth = req.headers && req.headers.authorization || '';
+  const email = Buffer.from(auth, 'base64').toString('ascii');
+  
+  if (!isEmail.validate(email)) return { user: null };
+
+  const users = await store.users.findOrCreate({ where: { email } });
+  const user = users && users[0] || null;
+
+  return { user: { ...user.dataValues } };
+};
+
 const server = new ApolloServer({
   typeDefs,
   resolvers,
   dataSources,
-  context: async ({ req }) => {
-    const auth = req.headers && req.header.authorization || '';
-    const email = Buffer.from(auth, 'base64').toString('ascii');
-    
-    if (!isEmail.validate(email)) return { user: null };
-
-    const users = await store.users.findOrCreate({ where: { email } });
-    const user = users && users[0] || null;
-
-    return { user: { ...user.dataValues } };
-  }
+  context,
 });
 
 server.listen().then(({ url }) => {
