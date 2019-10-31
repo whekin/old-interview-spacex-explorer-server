@@ -32,13 +32,16 @@ class UserAPI extends DataSource {
 
   async bookTrips({ launchIds }) {
     const userId = this.context.user.id;
-    if (!userId) return [];
+    if (!userId) return;
 
-    const results = await Promise.all(
-      launchIds.map(launchId => this.bookTrip({ launchId })),
-    );
+    let results = [];
 
-    return results.filter(bookTrip => bookTrip);
+    for (const launchId of launchIds) {
+      const res = await this.bookTrip({ launchId });
+      if (res) results.push(res);
+    }
+
+    return results;
   }
 
   async bookTrip({ launchId }) {
