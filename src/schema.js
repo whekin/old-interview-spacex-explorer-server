@@ -1,6 +1,9 @@
 import { gql } from 'apollo-server';
 
+
 export default gql`
+    scalar DateTime
+
     type Query {
         launches(pageSize: Int, after: String): LaunchConnection!
         launch(id: ID!): Launch
@@ -19,6 +22,7 @@ export default gql`
         mission: Mission
         rocket: Rocket
         isBooked: Boolean!
+        date: DateTime!
     }
 
     type Rocket {

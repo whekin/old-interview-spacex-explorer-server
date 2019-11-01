@@ -41,6 +41,7 @@ export default class LaunchAPI extends RESTDataSource {
         name: launch.rocket.rocket_name,
         type: launch.rocket.rocket_type,
       },
+      date: new Date(launch.launch_date_unix).toISOString()
     };
   }
 }
