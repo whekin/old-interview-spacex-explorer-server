@@ -5,7 +5,7 @@ export default gql`
     scalar DateTime
 
     type Query {
-        launches(pageSize: Int, after: String): LaunchConnection!
+        launches(pageSize: Int, after: String, from: DateTime, to: DateTime): LaunchConnection!
         launch(id: ID!): Launch
         me: User
     }
