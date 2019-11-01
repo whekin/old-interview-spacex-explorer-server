@@ -70,16 +70,21 @@ const DateTime = new GraphQLScalarType({
     return result;
   },
 });
+
+
 export default {
   DateTime,
   Query: {
-    launches: async (_, { pageSize = 20, after }, { dataSources }) => {
+    launches: async (_, { pageSize = 20, after, from, to }, { dataSources }) => {
       const allLaunches = await dataSources.launchAPI.getAllLaunches();
       allLaunches.reverse();
+
       const launches = paginateResults({
         after,
         pageSize,
         results: allLaunches,
+        from,
+        to
       });
 
       return {

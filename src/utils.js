@@ -4,10 +4,15 @@ module.exports.paginateResults = ({
   after: cursor,
   pageSize = 20,
   results,
+  from,
+  to,
   // can pass in a function to calculate an item's cursor
   getCursor = () => null,
 }) => {
   if (pageSize < 1) return [];
+  
+  if (from) results = results.filter((launch) => new Date(launch.date) > from);
+  if (to) results = results.filter((launch) => new Date(launch.date) < to);
 
   if (!cursor) return results.slice(0, pageSize);
   const cursorIndex = results.findIndex(item => {

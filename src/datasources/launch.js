@@ -29,7 +29,7 @@ export default class LaunchAPI extends RESTDataSource {
   launchReducer(launch) {
     return {
       id: launch.flight_number || 0,
-      cursor: `${launch.launch_date_unix}`,
+      cursor: `${launch.launch_date_unix * 1000}`,
       site: launch.launch_site && launch.launch_site.site_name,
       mission: {
         name: launch.mission_name,
@@ -41,7 +41,7 @@ export default class LaunchAPI extends RESTDataSource {
         name: launch.rocket.rocket_name,
         type: launch.rocket.rocket_type,
       },
-      date: new Date(launch.launch_date_unix).toISOString()
+      date: new Date(launch.launch_date_unix * 1000).toISOString()
     };
   }
 }
