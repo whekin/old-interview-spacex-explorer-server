@@ -188,7 +188,7 @@ export default {
     cart: async (_, __, { dataSources }) => dataSources.cartAPI.findOrCreateCart(),
   },
   Cart: {
-    launches: async (cart, _, { dataSources }) => dataSources.launchAPI.getAllCartLaunches({ cartId: cart.id }),
+    launches: async (cart, _, { dataSources }) => dataSources.cartAPI.getAllCartLaunches(),
     user: async(cart, _, { dataSources }) => dataSources.userAPI.findOrCreateUser({ userId: cart.id })
   },
 };

@@ -19,6 +19,16 @@ export default class CartAPI extends DataSource {
     return carts && carts[0] ? carts[0] : null;
   }
 
+  async getAllCartLaunches() {
+    const userId = this.context.user.id;
+    if (!userId) return null;
+
+    const [{ dataValues: { id: cartId } }] = await this.store.carts.findOrCreate({ where: { userId } });
+    const cartLaunches = await this.store.cartsLaunches.findAll({ where: { cartId } });
+
+    return cartLaunches.map(cartLaunch => cartLaunch.launchId);
+  }
+
   async addToCart({ launchId }) {
     const userId = this.context.user.id;
     if (!userId) return null;
