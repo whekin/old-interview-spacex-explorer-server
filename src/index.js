@@ -5,6 +5,7 @@ import resolvers from './resolvers';
 
 import LaunchAPI from './datasources/launch';
 import UserAPI from './datasources/user';
+import CartAPI from './datasources/cart';
 
 import isEmail from 'isemail';
 
@@ -15,8 +16,9 @@ dotenv.config();
 const store = createStore();
 
 const dataSources = () => ({
-  launchAPI: new LaunchAPI(),
+  launchAPI: new LaunchAPI({ store }),
   userAPI: new UserAPI({ store }),
+  cartAPI: new CartAPI({ store }),
 });
 
 const context = async ({ req }) => {
@@ -50,6 +52,7 @@ export default {
   ApolloServer,
   LaunchAPI,
   UserAPI,
+  CartAPI,
   store,
   server,
 };

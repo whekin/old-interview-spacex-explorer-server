@@ -70,5 +70,45 @@ module.exports.createStore = () => {
     userId: SQL.INTEGER,
   });
 
-  return { users, trips };
+  const launches = db.define('launch', {
+    id: {
+      type: SQL.INTEGER,
+      primaryKey: true,
+    },
+    createdAt: SQL.DATE,
+    updatedAt: SQL.DATE,
+    cartId: SQL.INTEGER,
+  });
+
+  const carts = db.define('cart', {
+    id: {
+      type: SQL.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    userId: SQL.INTEGER,
+    createdAt: SQL.DATE,
+    updatedAt: SQL.DATE,
+  });
+
+  const cartsLaunches = db.define('cartLaunch', {
+    id: {
+      type: SQL.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    createdAt: SQL.DATE,
+    updatedAt: SQL.DATE,
+    launchId: SQL.INTEGER,
+    cartId: SQL.INTEGER,
+  });
+
+  users.hasMany(trips);
+  carts.belongsTo(users, { foreignKey: 'userId', as: 'user' });
+  carts.belongsToMany(launches, { through: 'cartLaunch', foreignKey: 'cartId' });
+  launches.belongsToMany(carts, { through: 'cartLaunch', foreignKey: 'launchId' });
+
+  db.sync();
+
+  return { users, trips, carts, launches, cartsLaunches };
 };

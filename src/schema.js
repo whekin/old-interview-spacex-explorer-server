@@ -8,6 +8,7 @@ export default gql`
         launches(pageSize: Int, after: String, from: DateTime, to: DateTime): LaunchConnection!
         launch(id: ID!): Launch
         me: User
+        cart: Cart!
     }
 
     type LaunchConnection {
@@ -24,6 +25,11 @@ export default gql`
         isBooked: Boolean!
         date: DateTime!
     }
+    
+    type Cart {
+        launches: [Launch!]!
+        user: User!
+    }
 
     type Rocket {
         id: ID!
@@ -34,7 +40,8 @@ export default gql`
     type User {
         id: ID!
         email: String!
-        trips: [Launch]!
+        trips: [Launch!]!
+        cart: Cart!
     }
 
     type Mission {
@@ -51,11 +58,19 @@ export default gql`
         bookTrips(launchIds: [ID]!): TripUpdateResponse!
         cancelTrip(launchId: ID!): TripUpdateResponse!
         login(email: String): String # login token
+        addToCart(launchId: ID!): CartUpdateResponse!
+        removeFromCart(launchId: ID!): CartUpdateResponse!
     }
 
     type TripUpdateResponse {
         success: Boolean!
         message: String
         launches: [Launch]
+    }
+
+    type CartUpdateResponse {
+        success: Boolean!
+        message: String
+        cart: Cart
     }
 `;
