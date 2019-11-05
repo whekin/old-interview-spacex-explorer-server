@@ -98,10 +98,12 @@ export default {
     },
     launch: (_, { id }, { dataSources }) => dataSources.launchAPI.getLaunchById({ launchId: id }),
     me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser(),
+    cart: (_, __, { dataSources }) => dataSources.cartAPI.findOrCreateCart(),
   },
   Mutation: {
     login: async (_, { email }, { dataSources }) => {
       const user = await dataSources.userAPI.findOrCreateUser({ email });
+      await dataSources.cartAPI.findOrCreateCart({ userId: user.dataValues.id });
       if (user) return Buffer.from(email).toString('base64');
     },
     bookTrips: async (_, { launchIds }, { dataSources }) => {
@@ -115,6 +117,30 @@ export default {
           ? 'Trips have booked successfully'
           : `The following trips can't be booked: ${launchIds.filter(id => !res.includes(id))}`,
         launches,
+      };
+    },
+    addToCart: async (_, { launchId }, { dataSources }) => {
+      const res = await dataSources.cartAPI.addToCart({ launchId });
+      const cart = await dataSources.cartAPI.findOrCreateCart();
+      const success = !!res;
+      return {
+        success,
+        cart,
+        message: success
+          ? 'Add the launch successfully'
+          : 'Some problems are here',
+      };
+    },
+    removeFromCart: async (_, { launchId }, { dataSources }) => {
+      const res = await dataSources.cartAPI.removeFromCart({ launchId });
+      const cart = await dataSources.cartAPI.findOrCreateCart();
+      const success = !!res;
+      return {
+        success,
+        cart,
+        message: success
+          ? 'Remove the launch from the cart successfully'
+          : 'Some problems are here',
       };
     },
     cancelTrip: async (_, { launchId }, { dataSources }) => {
@@ -159,5 +185,10 @@ export default {
         }) || []
       );
     },
+    cart: async (_, __, { dataSources }) => dataSources.cartAPI.findOrCreateCart(),
+  },
+  Cart: {
+    launches: async (cart, _, { dataSources }) => dataSources.launchAPI.getAllCartLaunches({ cartId: cart.id }),
+    user: async(cart, _, { dataSources }) => dataSources.userAPI.findOrCreateUser({ userId: cart.id })
   },
 };
