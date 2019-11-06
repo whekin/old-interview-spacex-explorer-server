@@ -4,10 +4,15 @@ module.exports.paginateResults = ({
   after: cursor,
   pageSize = 20,
   results,
+  from,
+  to,
   // can pass in a function to calculate an item's cursor
   getCursor = () => null,
 }) => {
   if (pageSize < 1) return [];
+  
+  if (from) results = results.filter((launch) => new Date(launch.date) > from);
+  if (to) results = results.filter((launch) => new Date(launch.date) < to);
 
   if (!cursor) return results.slice(0, pageSize);
   const cursorIndex = results.findIndex(item => {
@@ -65,5 +70,45 @@ module.exports.createStore = () => {
     userId: SQL.INTEGER,
   });
 
-  return { users, trips };
+  const launches = db.define('launch', {
+    id: {
+      type: SQL.INTEGER,
+      primaryKey: true,
+    },
+    createdAt: SQL.DATE,
+    updatedAt: SQL.DATE,
+    cartId: SQL.INTEGER,
+  });
+
+  const carts = db.define('cart', {
+    id: {
+      type: SQL.INTEGER,
+      primaryKey: true,
+      autoIncrement: true
+    },
+    userId: SQL.INTEGER,
+    createdAt: SQL.DATE,
+    updatedAt: SQL.DATE,
+  });
+
+  const cartsLaunches = db.define('cartLaunch', {
+    id: {
+      type: SQL.INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
+    createdAt: SQL.DATE,
+    updatedAt: SQL.DATE,
+    launchId: SQL.INTEGER,
+    cartId: SQL.INTEGER,
+  });
+
+  users.hasMany(trips);
+  carts.belongsTo(users, { foreignKey: 'userId', as: 'user' });
+  carts.belongsToMany(launches, { through: 'cartLaunch', foreignKey: 'cartId' });
+  launches.belongsToMany(carts, { through: 'cartLaunch', foreignKey: 'launchId' });
+
+  db.sync();
+
+  return { users, trips, carts, launches, cartsLaunches };
 };

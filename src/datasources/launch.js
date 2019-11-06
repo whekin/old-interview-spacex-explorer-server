@@ -1,8 +1,9 @@
 import { RESTDataSource } from 'apollo-datasource-rest';
 
 export default class LaunchAPI extends RESTDataSource {
-  constructor() {
+  constructor({ store }) {
     super();
+    this.store = store;
     this.baseURL = 'https://api.spacexdata.com/v2/';
   }
 
@@ -18,6 +19,15 @@ export default class LaunchAPI extends RESTDataSource {
     const response = await this.get('launches', { flight_number: launchId });
 
     return this.launchReducer(response[0]);
+  }
+
+  async getAllCartLaunches({ cartId }) {
+    const cartLaunches = await this.store.cartsLaunches.findAll({ where: { cartId } });
+
+    const launchIds = cartLaunches.map(cartLaunch => cartLaunch.launchId);
+    const launches = await this.getLaunchesByIds({ launchIds });
+
+    return launches;
   }
 
   getLaunchesByIds({ launchIds }) {

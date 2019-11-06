@@ -75,6 +75,19 @@ class UserAPI extends DataSource {
     });
     return found && found.length > 0;
   }
+
+  async isInCartOnLaunch({ launchId }) {
+    if (!this.context || !this.context.user) return false;
+
+    const userId = this.context.user.id;
+    const [{ dataValues: { id: cartId } }] = await this.store.carts.findOrCreate({ where: { userId } });
+
+    const found = await this.store.cartsLaunches.findAll({
+      where: { cartId, launchId }
+    });
+
+    return found && found.length > 0;
+  }
 }
 
 module.exports = UserAPI;

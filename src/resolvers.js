@@ -70,16 +70,21 @@ const DateTime = new GraphQLScalarType({
     return result;
   },
 });
+
+
 export default {
   DateTime,
   Query: {
-    launches: async (_, { pageSize = 20, after }, { dataSources }) => {
+    launches: async (_, { pageSize = 20, after, from, to }, { dataSources }) => {
       const allLaunches = await dataSources.launchAPI.getAllLaunches();
       allLaunches.reverse();
+
       const launches = paginateResults({
         after,
         pageSize,
         results: allLaunches,
+        from,
+        to
       });
 
       return {
@@ -93,10 +98,12 @@ export default {
     },
     launch: (_, { id }, { dataSources }) => dataSources.launchAPI.getLaunchById({ launchId: id }),
     me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser(),
+    cart: (_, __, { dataSources }) => dataSources.cartAPI.findOrCreateCart(),
   },
   Mutation: {
     login: async (_, { email }, { dataSources }) => {
       const user = await dataSources.userAPI.findOrCreateUser({ email });
+      await dataSources.cartAPI.findOrCreateCart({ userId: user.dataValues.id });
       if (user) return Buffer.from(email).toString('base64');
     },
     bookTrips: async (_, { launchIds }, { dataSources }) => {
@@ -110,6 +117,42 @@ export default {
           ? 'Trips have booked successfully'
           : `The following trips can't be booked: ${launchIds.filter(id => !res.includes(id))}`,
         launches,
+      };
+    },
+    addToCart: async (_, { launchId }, { dataSources }) => {
+      const res = await dataSources.cartAPI.addToCart({ launchId });
+      const cart = await dataSources.cartAPI.findOrCreateCart();
+      const success = !!res;
+      return {
+        success,
+        cart,
+        message: success
+          ? 'The launch has added to the cart successfully'
+          : `The launch id number ${launchId} can't be added to the cart`,
+      };
+    },
+    removeFromCart: async (_, { launchId }, { dataSources }) => {
+      const res = await dataSources.cartAPI.removeFromCart({ launchId });
+      const cart = await dataSources.cartAPI.findOrCreateCart();
+      const success = !!res;
+      return {
+        success,
+        cart,
+        message: success
+          ? 'The laucnh has removed from the cart successfully'
+          : `The launch id number ${launchId} can't be removed from the cart`,
+      };
+    },
+    clearCart: async (_, __, { dataSources }) => {
+      const res = await dataSources.cartAPI.clearCart();
+      const cart = await dataSources.cartAPI.findOrCreateCart();
+      const success = !!res;
+      return { 
+        success,
+        cart,
+        message: success
+          ? 'The cart has cleared successfully'
+          : 'The cart can\'t be cleared' 
       };
     },
     cancelTrip: async (_, { launchId }, { dataSources }) => {
@@ -140,7 +183,9 @@ export default {
   },
   Launch: {
     isBooked: async (launch, _, { dataSources }) =>
-      dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id })
+      dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id }),
+    isInCart: async (launch, _, { dataSources }) =>
+      dataSources.userAPI.isInCartOnLaunch({ launchId: launch.id }),
   },
   User: {
     trips: async (_, __, { dataSources }) => {
@@ -154,5 +199,10 @@ export default {
         }) || []
       );
     },
+    cart: async (_, __, { dataSources }) => dataSources.cartAPI.findOrCreateCart(),
+  },
+  Cart: {
+    launches: async (cart, _, { dataSources }) => dataSources.cartAPI.getAllCartLaunches(),
+    user: async(cart, _, { dataSources }) => dataSources.userAPI.findOrCreateUser({ userId: cart.id })
   },
 };
