@@ -183,7 +183,9 @@ export default {
   },
   Launch: {
     isBooked: async (launch, _, { dataSources }) =>
-      dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id })
+      dataSources.userAPI.isBookedOnLaunch({ launchId: launch.id }),
+    isInCart: async (launch, _, { dataSources }) =>
+      dataSources.userAPI.isInCartOnLaunch({ launchId: launch.id }),
   },
   User: {
     trips: async (_, __, { dataSources }) => {

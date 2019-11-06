@@ -22,12 +22,13 @@ export default gql`
         site: String
         mission: Mission
         rocket: Rocket
+        isInCart: Boolean!
         isBooked: Boolean!
         date: DateTime!
     }
     
     type Cart {
-        launches: [ID!]!
+        launches: [Launch!]!
         user: User!
     }
 
