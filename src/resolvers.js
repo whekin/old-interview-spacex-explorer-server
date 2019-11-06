@@ -127,8 +127,8 @@ export default {
         success,
         cart,
         message: success
-          ? 'Add the launch successfully'
-          : 'Some problems are here',
+          ? 'The launch has added to the cart successfully'
+          : `The launch id number ${launchId} can't be added to the cart`,
       };
     },
     removeFromCart: async (_, { launchId }, { dataSources }) => {
@@ -139,8 +139,8 @@ export default {
         success,
         cart,
         message: success
-          ? 'Remove the launch from the cart successfully'
-          : 'Some problems are here',
+          ? 'The laucnh has removed from the cart successfully'
+          : `The launch id number ${launchId} can't be removed from the cart`,
       };
     },
     clearCart: async (_, __, { dataSources }) => {
@@ -151,8 +151,8 @@ export default {
         success,
         cart,
         message: success
-          ? 'Clear the cart successfully'
-          : 'Some problems are here'
+          ? 'The cart has cleared successfully'
+          : 'The cart can\'t be cleared' 
       };
     },
     cancelTrip: async (_, { launchId }, { dataSources }) => {
