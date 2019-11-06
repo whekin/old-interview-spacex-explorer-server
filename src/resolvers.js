@@ -143,6 +143,18 @@ export default {
           : 'Some problems are here',
       };
     },
+    clearCart: async (_, __, { dataSources }) => {
+      const res = await dataSources.cartAPI.clearCart();
+      const cart = await dataSources.cartAPI.findOrCreateCart();
+      const success = !!res;
+      return { 
+        success,
+        cart,
+        message: success
+          ? 'Clear the cart successfully'
+          : 'Some problems are here'
+      };
+    },
     cancelTrip: async (_, { launchId }, { dataSources }) => {
       const res = await dataSources.userAPI.cancelTrip({ launchId });
 

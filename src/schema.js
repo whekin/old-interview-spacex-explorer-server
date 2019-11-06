@@ -60,6 +60,7 @@ export default gql`
         login(email: String): String # login token
         addToCart(launchId: ID!): CartUpdateResponse!
         removeFromCart(launchId: ID!): CartUpdateResponse!
+        clearCart: CartUpdateResponse!
     }
 
     type TripUpdateResponse {
