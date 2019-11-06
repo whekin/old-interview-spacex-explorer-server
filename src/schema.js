@@ -27,7 +27,7 @@ export default gql`
     }
     
     type Cart {
-        launches: [Launch!]!
+        launches: [ID!]!
         user: User!
     }
 
