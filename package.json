@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest",
     "dev": "nodemon --exec babel-node src/index.js",
-    "start": "npm run build && node build/index.js",
+    "start": "node build/index.js",
     "build": "babel src -d build",
     "start:ci": "node src/index.js"
   },
