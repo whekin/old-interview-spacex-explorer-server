@@ -15,7 +15,7 @@ export default class CartAPI extends DataSource {
     const userId = userIdArg || this.context.user.id;
     if (!userId) return null;
 
-    const carts = await this.store.carts.findOrCreate({ where: { userId } });
+    const carts = await this.store.carts.findOrCreate({ where: { userId, isShared: false } });
     return carts && carts[0] ? carts[0] : null;
   }
 

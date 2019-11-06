@@ -30,6 +30,7 @@ export default gql`
     type Cart {
         launches: [Launch!]!
         user: User!
+        isShared: Boolean
     }
 
     type Rocket {

@@ -87,6 +87,7 @@ module.exports.createStore = () => {
       autoIncrement: true
     },
     userId: SQL.INTEGER,
+    isShared: SQL.BOOLEAN,
     createdAt: SQL.DATE,
     updatedAt: SQL.DATE,
   });
