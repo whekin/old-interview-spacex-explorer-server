@@ -53,4 +53,15 @@ export default class CartAPI extends DataSource {
 
     return isDestroyedLaunchSuccessfully;
   }
+
+  async clearCart() {
+    const userId = this.context.user.id;
+    if (!userId) return null;
+
+    const [{ dataValues: { id: cartId } }] = await this.store.carts.findOrCreate({ where: { userId } });
+    
+    const isClearedSuccessfully = await this.store.launches.destroy({ where: { cartId } } );
+
+    return isClearedSuccessfully;
+  }
 }
