@@ -63,6 +63,7 @@ export default gql`
         addToCart(launchId: ID!): CartUpdateResponse!
         removeFromCart(launchId: ID!): CartUpdateResponse!
         clearCart: CartUpdateResponse!
+        toggleIsCartShared: CartUpdateResponse!
     }
 
     type TripUpdateResponse {

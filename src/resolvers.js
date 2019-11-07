@@ -155,6 +155,19 @@ export default {
           : 'The cart can\'t be cleared' 
       };
     },
+    toggleIsCartShared: async (_, __, { dataSources }) => {
+      const res = await dataSources.cartAPI.toggleIsCartShared();
+      const cart = await dataSources.cartAPI.findOrCreateCart();
+      const success = !!res;
+
+      return {
+        success,
+        cart,
+        message: success
+          ? `The cart has toggled to ${cart.dataValues.isShared && 'not'} shared now`
+          : 'The cart can\'t be toggled'
+      };
+    },
     cancelTrip: async (_, { launchId }, { dataSources }) => {
       const res = await dataSources.userAPI.cancelTrip({ launchId });
 

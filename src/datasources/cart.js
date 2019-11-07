@@ -15,7 +15,10 @@ export default class CartAPI extends DataSource {
     const userId = userIdArg || this.context.user.id;
     if (!userId) return null;
 
-    const carts = await this.store.carts.findOrCreate({ where: { userId, isShared: false } });
+    const carts = await this.store.carts.findOrCreate({
+      defaults: { isShared: false },
+      where: { userId }
+    });
     return carts && carts[0] ? carts[0] : null;
   }
 
@@ -66,5 +69,15 @@ export default class CartAPI extends DataSource {
     const isClearedSuccessfully = await this.store.launches.destroy({ where: { cartId } } );
 
     return isClearedSuccessfully;
+  }
+
+  async toggleIsCartShared() {
+    const userId = this.context.user.id;
+    if (!userId) return null;
+
+    const [{ dataValues: { isShared: isSharedCurr } }] = await this.store.carts.findOrCreate({ where: { userId } });
+    const isUpdatedSuccessfully = await this.store.carts.update({ isShared: !isSharedCurr }, { where: { userId } });
+
+    return isUpdatedSuccessfully;
   }
 }
