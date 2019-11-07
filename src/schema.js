@@ -9,6 +9,7 @@ export default gql`
         launch(id: ID!): Launch
         me: User
         cart: Cart!
+        sharedCart(userId: ID!): Cart
     }
 
     type LaunchConnection {
@@ -28,8 +29,10 @@ export default gql`
     }
     
     type Cart {
+        id: ID!
         launches: [Launch!]!
         user: User!
+        isShared: Boolean
     }
 
     type Rocket {
@@ -62,6 +65,7 @@ export default gql`
         addToCart(launchId: ID!): CartUpdateResponse!
         removeFromCart(launchId: ID!): CartUpdateResponse!
         clearCart: CartUpdateResponse!
+        toggleIsCartShared: CartUpdateResponse!
     }
 
     type TripUpdateResponse {

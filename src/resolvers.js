@@ -99,6 +99,7 @@ export default {
     launch: (_, { id }, { dataSources }) => dataSources.launchAPI.getLaunchById({ launchId: id }),
     me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser(),
     cart: (_, __, { dataSources }) => dataSources.cartAPI.findOrCreateCart(),
+    sharedCart: (_, { userId }, { dataSources }) => dataSources.cartAPI.findSharedCart({ userId }),
   },
   Mutation: {
     login: async (_, { email }, { dataSources }) => {
@@ -155,6 +156,19 @@ export default {
           : 'The cart can\'t be cleared' 
       };
     },
+    toggleIsCartShared: async (_, __, { dataSources }) => {
+      const res = await dataSources.cartAPI.toggleIsCartShared();
+      const cart = await dataSources.cartAPI.findOrCreateCart();
+      const success = !!res;
+
+      return {
+        success,
+        cart,
+        message: success
+          ? `The cart has toggled to ${cart.dataValues.isShared && 'not'} shared now`
+          : 'The cart can\'t be toggled'
+      };
+    },
     cancelTrip: async (_, { launchId }, { dataSources }) => {
       const res = await dataSources.userAPI.cancelTrip({ launchId });
 
@@ -202,7 +216,7 @@ export default {
     cart: async (_, __, { dataSources }) => dataSources.cartAPI.findOrCreateCart(),
   },
   Cart: {
-    launches: async (cart, _, { dataSources }) => dataSources.cartAPI.getAllCartLaunches(),
+    launches: async (cart, _, { dataSources }) => dataSources.cartAPI.getAllCartLaunches({ cart }),
     user: async(cart, _, { dataSources }) => dataSources.userAPI.findOrCreateUser({ userId: cart.id })
   },
 };
