@@ -80,7 +80,7 @@ class UserAPI extends DataSource {
     if (!this.context || !this.context.user) return false;
 
     const userId = this.context.user.id;
-    const [{ dataValues: { id: cartId } }] = await this.store.carts.findOrCreate({ where: { userId } });
+    const [{ dataValues: { id: cartId } }] = await this.store.carts.findAll({ where: { userId } });
 
     const found = await this.store.cartsLaunches.findAll({
       where: { cartId, launchId }
