@@ -28,6 +28,7 @@ export default gql`
     }
     
     type Cart {
+        id: ID!
         launches: [Launch!]!
         user: User!
         isShared: Boolean
