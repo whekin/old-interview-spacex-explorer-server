@@ -99,6 +99,7 @@ export default {
     launch: (_, { id }, { dataSources }) => dataSources.launchAPI.getLaunchById({ launchId: id }),
     me: (_, __, { dataSources }) => dataSources.userAPI.findOrCreateUser(),
     cart: (_, __, { dataSources }) => dataSources.cartAPI.findOrCreateCart(),
+    sharedCart: (_, { userId }, { dataSources }) => dataSources.cartAPI.findSharedCart({ userId }),
   },
   Mutation: {
     login: async (_, { email }, { dataSources }) => {
@@ -215,7 +216,7 @@ export default {
     cart: async (_, __, { dataSources }) => dataSources.cartAPI.findOrCreateCart(),
   },
   Cart: {
-    launches: async (cart, _, { dataSources }) => dataSources.cartAPI.getAllCartLaunches(),
+    launches: async (cart, _, { dataSources }) => dataSources.cartAPI.getAllCartLaunches({ cart }),
     user: async(cart, _, { dataSources }) => dataSources.userAPI.findOrCreateUser({ userId: cart.id })
   },
 };

@@ -9,6 +9,7 @@ export default gql`
         launch(id: ID!): Launch
         me: User
         cart: Cart!
+        sharedCart(userId: ID!): Cart
     }
 
     type LaunchConnection {
